@@ -1,7 +1,6 @@
 const path = require("node:path");
 const {expect} = require("chai");
 const {scanRepository} = require("../../core/scanner");
-const {defaultPatterns} = require("../../core/patterns");
 
 const MOCK_DIR = path.join(__dirname, "../utils/mockRepo");
 
@@ -15,14 +14,14 @@ describe("Scanner", () => {
         expect(results).to.have.lengthOf(2);
         expect(results).to.deep.include.members([
             {
-                file: path.join(MOCK_DIR, "file1.txt"),
-                match: "test-pattern",
                 line: 1,
+                match: "test-pattern",
+                file: path.join(MOCK_DIR, "file1.txt"),
             },
             {
-                file: path.join(MOCK_DIR, "subdir/nested.txt"),
-                match: "test-pattern",
                 line: 1,
+                match: "test-pattern",
+                file: path.join(MOCK_DIR, "subdir/nested.txt"),
             },
         ]);
     });
@@ -35,9 +34,9 @@ describe("Scanner", () => {
 
         expect(results).to.have.lengthOf(1);
         expect(results[0]).to.deep.equal({
-            file: path.join(MOCK_DIR, "file1.txt"),
-            match: "test-pattern",
             line: 1,
+            match: "test-pattern",
+            file: path.join(MOCK_DIR, "file1.txt"),
         });
     });
 
@@ -75,9 +74,9 @@ describe("Scanner", () => {
         });
 
         const expectedResult = {
-            file: path.resolve(MOCK_DIR, "defaultPatterns/aws-key.txt"),
-            match: "AKIAIOSFODNN7EXAMPLE",
             line: 1,
+            match: "AKIAIOSFODNN7EXAMPLE",
+            file: path.resolve(MOCK_DIR, "defaultPatterns/aws-key.txt"),
         };
 
         expect(results).to.deep.include(expectedResult);

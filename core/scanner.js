@@ -10,7 +10,9 @@ const {getAllFiles} = require("../utils/fileUtils");
  */
 const scanRepository = async (repoPath, config) => {
     const files = await getAllFiles(repoPath, config.ignorePaths || []);
-    const patterns = defaultPatterns.concat(config.customPatterns || []);
+    const patterns = Object.values(defaultPatterns).concat(
+        config.customPatterns || [],
+    );
 
     const combinedRegex = createCombinedRegex(patterns);
 

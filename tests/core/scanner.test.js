@@ -57,4 +57,13 @@ describe("Scanner", () => {
 
         expect(results).to.be.an("array").that.is.empty;
     });
+
+    it("should handle invalid patterns gracefully", async () => {
+        await expect(
+            scanRepository(MOCK_DIR, {
+                ignorePaths: [],
+                customPatterns: ["[invalid-regex"],
+            }),
+        ).to.be.rejectedWith(SyntaxError);
+    });
 });

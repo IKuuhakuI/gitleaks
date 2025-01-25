@@ -1,0 +1,98 @@
+{
+    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+    "organizeImports": {
+        "enabled": false
+    },
+    "formatter": {
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 80,
+        "lineEnding": "lf",
+        "ignore": [
+            ".vscode",
+            "**/node_modules",
+            "**/package.json",
+            "**/package-lock.json"
+        ]
+    },
+    "files": {
+        "ignore": ["**/node_modules"]
+    },
+    "javascript": {
+        "globals": [
+            "it",
+            "xit",
+            "expect",
+            "describe",
+            "xdescribe",
+            "sinon",
+            "after",
+            "before",
+            "afterEach",
+            "beforeEach"
+        ],
+        "formatter": {
+            "arrowParentheses": "always",
+            "jsxQuoteStyle": "double",
+            "semicolons": "always",
+            "trailingCommas": "all",
+            "quoteProperties": "asNeeded",
+            "bracketSpacing": false,
+            "bracketSameLine": false
+        }
+    },
+    "json": {
+        "parser": {
+            "allowComments": true,
+            "allowTrailingCommas": true
+        },
+        "formatter": {
+            "enabled": true,
+            "indentStyle": "space",
+            "indentWidth": 4,
+            "lineEnding": "lf"
+        }
+    },
+    "linter": {
+        "enabled": true,
+        "ignore": ["node_modules", "package.json", "package-lock.json"],
+        "rules": {
+            "recommended": true,
+            "suspicious": {
+                "useAwait": "error",
+                "noConsoleLog": "warn",
+                "noThenProperty": "off",
+                "noGlobalAssign": "off",
+                "noEmptyBlockStatements": "error",
+                "noControlCharactersInRegex": "warn",
+                "noMisrefactoredShorthandAssign": "error",
+                "noApproximativeNumericConstant": "error"
+            },
+            "style": {
+                "noParameterAssign": "off",
+                "useBlockStatements": "off",
+                "noShoutyConstants": "error",
+                "useFragmentSyntax": "error",
+                "useNumberNamespace": "error",
+                "useDefaultParameterLast": "off"
+            },
+            "performance": {
+                "noDelete": "off",
+                "noAccumulatingSpread": "off"
+            },
+            "complexity": {
+                "noForEach": "warn",
+                "useArrowFunction": "off",
+                "noExcessiveNestedTestSuites": "off",
+                "useSimplifiedLogicExpression": "warn"
+            },
+            "correctness": {
+                "noUnusedImports": "error",
+                "noUnusedVariables": "error",
+                "useHookAtTopLevel": "error",
+                "noUndeclaredVariables": "error",
+                "noInvalidUseBeforeDeclaration": "error"
+            }
+        }
+    }
+}

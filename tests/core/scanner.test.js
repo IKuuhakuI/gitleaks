@@ -81,4 +81,19 @@ describe("Scanner", () => {
 
         expect(results).to.deep.include(expectedResult);
     });
+
+    it("should detect a GitHub token in files", async () => {
+        const results = await scanRepository(MOCK_DIR, {
+            ignorePaths: [],
+            customPatterns: [],
+        });
+
+        const expectedResult = {
+            line: 1,
+            match: "ghp_1234567890abcdef1234567890abcdef1234",
+            file: path.resolve(MOCK_DIR, "defaultPatterns/github-token.txt"),
+        };
+
+        expect(results).to.deep.include(expectedResult);
+    });
 });

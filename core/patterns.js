@@ -3,7 +3,7 @@ const defaultPatterns = {
     awsAccessKey: "AKIA[0-9A-Z]{16}",
     githubToken: "ghp_[A-Za-z0-9]{36}",
     googleApiKey: "AIza[0-9A-Za-z-_]{35}",
-    openAiSecretKey: "sk-[A-Za-z0-9]{32}",
+    openAiSecretKey: "sk-[A-Za-z0-9]{40}",
     genericApiKey: "\\b[A-Za-z0-9]{40}\\b",
 };
 

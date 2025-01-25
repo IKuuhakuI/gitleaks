@@ -111,4 +111,19 @@ describe("Scanner", () => {
 
         expect(results).to.deep.include(expectedResult);
     });
+
+    it("should detect an OpenAI key in files", async () => {
+        const results = await scanRepository(MOCK_DIR, {
+            ignorePaths: [],
+            customPatterns: [],
+        });
+
+        const expectedResult = {
+            line: 1,
+            match: "sk-1234567890abcdef1234567890abcdef12345678",
+            file: path.resolve(MOCK_DIR, "defaultPatterns/openai-key.txt"),
+        };
+
+        expect(results).to.deep.include(expectedResult);
+    });
 });

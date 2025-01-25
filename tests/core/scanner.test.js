@@ -39,4 +39,13 @@ describe("Scanner", () => {
             line: 1,
         });
     });
+
+    it("should return an empty array if no matches are found", async () => {
+        const results = await scanRepository(MOCK_DIR, {
+            ignorePaths: [],
+            customPatterns: ["no-match-pattern"],
+        });
+
+        expect(results).to.be.an("array").that.is.empty;
+    });
 });

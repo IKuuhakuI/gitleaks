@@ -28,8 +28,8 @@ describe("Scanner", () => {
 
     it("should ignore files in the specified ignorePaths", async () => {
         const results = await scanRepository(MOCK_DIR, {
-            ignorePaths: ["subdir", "defaultPatterns"],
             customPatterns: ["test-pattern"],
+            ignorePaths: ["subdir", "defaultPatterns"],
         });
 
         expect(results).to.have.lengthOf(1);

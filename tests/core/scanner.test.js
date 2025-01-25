@@ -48,4 +48,13 @@ describe("Scanner", () => {
 
         expect(results).to.be.an("array").that.is.empty;
     });
+
+    it("should handle files with no content gracefully", async () => {
+        const results = await scanRepository(MOCK_DIR, {
+            ignorePaths: [],
+            customPatterns: ["empty-file-pattern"],
+        });
+
+        expect(results).to.be.an("array").that.is.empty;
+    });
 });

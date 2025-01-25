@@ -25,4 +25,18 @@ describe("Scanner", () => {
             },
         ]);
     });
+
+    it("should ignore files in the specified ignorePaths", async () => {
+        const results = await scanRepository(MOCK_DIR, {
+            ignorePaths: ["subdir"],
+            customPatterns: ["test-pattern"],
+        });
+
+        expect(results).to.have.lengthOf(1);
+        expect(results[0]).to.deep.equal({
+            file: path.join(MOCK_DIR, "file1.txt"),
+            match: "test-pattern",
+            line: 1,
+        });
+    });
 });

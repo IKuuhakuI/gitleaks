@@ -1,0 +1,20 @@
+{
+  "name": "gitleaks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "biome check .",
+    "format": "biome format .",
+    "test": "mocha tests/**/*.test.js --recursive"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "chai": "4.3.7",
+    "mocha": "^11.1.0",
+    "sinon": "^19.0.2"
+  }
+}

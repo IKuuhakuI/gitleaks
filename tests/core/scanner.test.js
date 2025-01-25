@@ -96,4 +96,19 @@ describe("Scanner", () => {
 
         expect(results).to.deep.include(expectedResult);
     });
+
+    it("should detect a Google API key in files", async () => {
+        const results = await scanRepository(MOCK_DIR, {
+            ignorePaths: [],
+            customPatterns: [],
+        });
+
+        const expectedResult = {
+            line: 1,
+            match: "AIzaSyA1234567890ABCDEF1234567890abcdef",
+            file: path.resolve(MOCK_DIR, "defaultPatterns/google-key.txt"),
+        };
+
+        expect(results).to.deep.include(expectedResult);
+    });
 });

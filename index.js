@@ -17,6 +17,25 @@ const argv = yargs(hideBin(process.argv))
         type: "boolean",
         description: "Scan all files in the repository (default behavior)",
     })
+    .option("quiet", {
+        alias: "q",
+        type: "boolean",
+        description: "Suppress all output except errors",
+    })
+    .option("ignore", {
+        type: "array",
+        description: "Additional paths to ignore during the scan",
+    })
+    .option("patterns", {
+        alias: "p",
+        type: "array",
+        description: "Specify additional patterns to scan for",
+    })
+    .option("exclude", {
+        alias: "e",
+        type: "array",
+        description: "Exclude specific patterns from the scan",
+    })
     .version(version)
     .alias("version", "v")
     .help("help")

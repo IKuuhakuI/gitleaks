@@ -9,11 +9,11 @@ const reportResults = (matches) => {
         return;
     }
 
-    console.info(`[INFO] Found ${matches.length} potential issues:\n`);
+    console.warn(`[ERROR] Found ${matches.length} potential issues:\n`);
     matches.forEach((match, index) => {
-        console.info(`[INFO] ${index + 1}. File: ${match.file}`);
-        console.info(`[INFO]    Match: ${match.match}`);
-        console.info(`[INFO]    Line: ${match.line}\n`);
+        console.warn(`[ERROR] ${index + 1}. File: ${match.file}`);
+        console.warn(`[ERROR]    Match: ${match.match}`);
+        console.warn(`[ERROR]    Line: ${match.line}\n`);
     });
 };
 

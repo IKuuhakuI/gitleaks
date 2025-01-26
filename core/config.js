@@ -12,7 +12,12 @@ function loadConfig() {
     let config = {
         customPatterns: [],
         ignoredPatterns: [],
-        ignorePaths: ["node_modules", ".git"],
+        ignorePaths: [
+            ".git",
+            "node_modules",
+            "package.json",
+            "package-lock.json",
+        ],
     };
 
     if (fs.existsSync(configPath)) {

@@ -10,7 +10,21 @@
     "start": "node index.js",
     "test": "mocha tests/**/*.test.js --bail --recursive --require tests/index.js"
   },
-  "keywords": [],
+  "keywords": [
+    "security",
+    "scanner",
+    "sensitive-data",
+    "gitleaks",
+    "git",
+    "data-leak",
+    "open-source",
+    "cli-tool",
+    "pattern-detection",
+    "secret-detection",
+    "nodejs",
+    "javascript",
+    "ci-cd"
+  ],
   "author": "",
   "license": "MIT",
   "bin": {

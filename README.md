@@ -53,7 +53,7 @@ The project uses a `.gitleaksrc.json` file for custom configurations. This file 
 {
   "customPatterns": [],
   "ignoredPatterns": [],
-  "ignorePaths": ["node_modules", ".git"],
+  "ignorePaths": ["node_modules", ".git", "package.json", "package-lock.json",],
 }
 ```
 

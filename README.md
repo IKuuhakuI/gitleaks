@@ -1,4 +1,4 @@
-# Git Leaks
+# @ziul285/gitleaks
 ## By: Luiz Carlos Aguiar Carrion
 
 A lightweight and customizable tool for detecting sensitive data in your repositories. Git Leaks scans files for patterns like API keys, tokens, and other sensitive information based on default or user-defined configurations.
@@ -31,8 +31,41 @@ npm install
 ### **CLI Command**
 Run Git Leaks in the root directory of your repository:
 ```bash
-gitleaks
+gitleaks [options]
 ```
+
+### **Available Flags**
+| Flag             | Alias | Type       | Description                                       |
+|-------------------|-------|------------|---------------------------------------------------|
+| `--staged`        | `-s`  | `boolean`  | Scan only files in the staging area              |
+| `--all`           | `-a`  | `boolean`  | Scan all files in the repository (default)       |
+| `--quiet`         | `-q`  | `boolean`  | Suppress all output except errors                |
+| `--ignore`        |       | `array`    | Additional paths to ignore during the scan       |
+| `--patterns`      | `-p`  | `array`    | Specify additional patterns to scan for          |
+| `--exclude`       | `-e`  | `array`    | Exclude specific patterns from the scan          |
+| `--version`       | `-v`  | `boolean`  | Display the current version of the tool          |
+| `--help`          | `-h`  | `boolean`  | Show help message with usage details             |
+
+#### Example Commands
+- **Scan Staged Files Only:**
+  ```bash
+  gitleaks --staged
+  ```
+- **Scan All Files in Quiet Mode:**
+  ```bash
+  gitleaks --all --quiet
+  ```
+- **Ignore Additional Paths:**
+  ```bash
+  gitleaks --all --ignore dist build
+  ```
+- **Add Custom Patterns:**
+  ```bash
+  gitleaks --all --patterns "CUSTOM_PATTERN_1" "CUSTOM_PATTERN_2"
+  ```
+- **Exclude Patterns:**
+  ```bash
+  gitleaks --all --exclude githubToken
 
 
 ### **Configuration**
@@ -66,9 +99,8 @@ The following patterns are included by default. You can disable specific pattern
 |-----------------------|--------------------------------------------|------------------------------|
 | `awsAccessKey`        | `AKIA[0-9A-Z]{16}`                        | AWS Access Key               |
 | `githubToken`         | `ghp_[A-Za-z0-9]{36}`                     | GitHub Token                 |
-| `googleApiKey`        | `AIza[0-9A-Za-z-_]{35}`                   | Google API Key               |
+| `googleApiKey`        | `AIza[0-9A-Za-z-_]{33}`                   | Google API Key               |
 | `openAiSecretKey`     | `sk-[A-Za-z0-9]{48}`                      | OpenAI Secret Key            |
-| `geminiKey`           | `AIzaSy[a-zA-Z0-9\\-_]{33}`               | Gemini API Key               |
 | `genericApiKey`       | `\\b[A-Za-z0-9]{40}\\b`                   | Generic API Key              |
 
 

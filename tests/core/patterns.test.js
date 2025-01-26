@@ -43,11 +43,4 @@ describe("Default Patterns", () => {
 
         expect(openAiKey).to.match(regex);
     });
-
-    it("should match a Gemini key", () => {
-        const geminiKey = "AIzaSyEwcsswgzbu7NY221_KiERu0aRhI_lqIgd";
-        const regex = new RegExp(defaultPatterns.geminiKey);
-
-        expect(geminiKey).to.match(regex);
-    });
 });

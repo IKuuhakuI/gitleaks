@@ -29,6 +29,29 @@ describe("Scanner", () => {
         ]);
     });
 
+    it("should detect 2 or more sensitive data patterns in same file", async () => {
+        const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
+            ignoredPatterns: [],
+            ignorePaths: ["defaultPatterns"],
+            customPatterns: ["pattern-1", "pattern-2"],
+        });
+
+        expect(results).to.have.lengthOf(2);
+        expect(results).to.deep.include.members([
+            {
+                line: 1,
+                match: "pattern-1",
+                file: path.join(MOCK_DIR, "double-pattern.txt"),
+            },
+            {
+                line: 1,
+                match: "pattern-2",
+                file: path.join(MOCK_DIR, "double-pattern.txt"),
+            },
+        ]);
+    });
+
     it("should ignore files in the specified ignorePaths", async () => {
         const results = await scanRepository(MOCK_DIR, {
             defaultPatterns,

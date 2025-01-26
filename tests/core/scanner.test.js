@@ -127,7 +127,7 @@ describe("Scanner", () => {
         expect(results).to.deep.include(expectedResult);
     });
 
-    it("should detect a Gemini key in files", async () => {
+    it("should detect a Gemini custom key in files", async () => {
         const results = await scanRepository(MOCK_DIR, {
             ignorePaths: [],
             customPatterns: [],
@@ -135,7 +135,7 @@ describe("Scanner", () => {
 
         const expectedResult = {
             line: 1,
-            match: "gem-1234567890abcdef1234567890abcdef12345678",
+            match: "AIzaSyEwcsswgzbu7NY221_KiERu0aRhI_lqIgd",
             file: path.resolve(MOCK_DIR, "defaultPatterns/gemini-key.txt"),
         };
 

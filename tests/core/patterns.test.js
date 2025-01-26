@@ -45,7 +45,7 @@ describe("Default Patterns", () => {
     });
 
     it("should match a Gemini key", () => {
-        const geminiKey = "gem-1234567890abcdef1234567890abcdef12345678";
+        const geminiKey = "AIzaSyEwcsswgzbu7NY221_KiERu0aRhI_lqIgd";
         const regex = new RegExp(defaultPatterns.geminiKey);
 
         expect(geminiKey).to.match(regex);

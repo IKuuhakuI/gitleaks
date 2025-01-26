@@ -3,6 +3,33 @@
 
 A lightweight and customizable tool for detecting sensitive data in your repositories. Git Leaks scans files for patterns like API keys, tokens, and other sensitive information based on default or user-defined configurations.
 
+## Table of Contents
+1. [Features](#features)
+2. [Installation](#installation)
+   - [Option 1: Install via npm](#option-1-install-via-npm)
+   - [Option 2: Clone the Repository](#option-2-clone-the-repository)
+3. [Usage](#usage)
+   - [CLI Command](#cli-command)
+   - [Available Flags](#available-flags)
+   - [Example Commands](#example-commands)
+4. [Integrating with Husky](#integrating-with-husky)
+   - [Step 1: Install Husky](#step-1-install-husky)
+   - [Step 2: Create a Pre-Commit Hook](#step-2-create-a-pre-commit-hook)
+   - [Step 3: Create a Pre-Push Hook](#step-3-create-a-pre-push-hook)
+   - [Step 4: Test the Setup](#step-4-test-the-setup)
+   - [Advanced Husky Integration](#advanced-husky-integration)
+5. [Configuration](#configuration)
+   - [.gitleaksrc.json](#.gitleaksrcjson)
+   - [Default Config](#default-config-if-gitleaksrcjson-is-not-present)
+6. [Development](#development)
+   - [Run the Project Locally](#run-the-project-locally)
+   - [Run Tests](#run-tests)
+   - [Test Coverage](#test-coverage)
+7. [Adding to Another Project](#adding-to-another-project)
+   - [Install as a Dependency](#install-as-a-dependency)
+   - [Using in Code](#using-in-code)
+8. [Contributing](#contributing)
+9. [License](#license)
 
 ## Features
 
@@ -16,7 +43,7 @@ A lightweight and customizable tool for detecting sensitive data in your reposit
 
 ### **Option 1: Install via npm**
 ```bash
-npm install gitleaks
+npm install @ziul285/gitleaks
 ```
 
 ### **Option 2: Clone the Repository**
@@ -66,10 +93,55 @@ gitleaks [options]
 - **Exclude Patterns:**
   ```bash
   gitleaks --all --exclude githubToken
+  ```
+
+## Integrating with Husky
+
+You can integrate Git Leaks with Husky to automatically scan files during Git operations like `commit` or `push`.
+
+### **Step 1: Install Husky**
+If Husky is not already installed in your project, run:
+```bash
+npm install husky --save-dev
+```
+
+Set up Husky in your project:
+```bash
+npx husky install
+```
+
+### **Step 2: Create a Pre-Commit Hook**
+Add a Husky pre-commit hook to scan staged files for sensitive data:
+```bash
+npx husky add .husky/pre-commit "npx gitleaks --staged"
+```
+
+### **Step 3: Create a Pre-Push Hook**
+Optionally, add a pre-push hook to scan the entire repository before pushing:
+```bash
+npx husky add .husky/pre-push "npx gitleaks --all"
+```
+
+### **Step 4: Test the Setup**
+To verify the integration:
+1. Stage some changes with sensitive data.
+2. Attempt to commit or push.
+3. Git Leaks will run, and the commit/push will be blocked if sensitive data is detected.
 
 
-### **Configuration**
+### **Advanced Husky Integration**
+- If you want to customize the hooks further, you can modify the commands in the `.husky/pre-commit` or `.husky/pre-push` files.
+- Example `pre-commit` file:
+  ```bash
+  #!/bin/sh
 
+  npx gitleaks --staged --quiet
+  ```
+
+
+## Configuration
+
+### **.gitleaksrc.json**
 The project uses a `.gitleaksrc.json` file for custom configurations. This file should be located in the root directory of the repository you want to scan.
 
 #### Example `.gitleaksrc.json`:
@@ -77,7 +149,7 @@ The project uses a `.gitleaksrc.json` file for custom configurations. This file 
 {
   "ignoredPatterns": ["awsAccessKey"],
   "ignorePaths": ["node_modules", ".git"],
-  "customPatterns": ["TEST_KEY_[A-Za-z0-9]{10}"], 
+  "customPatterns": ["TEST_KEY_[A-Za-z0-9]{10}"]
 }
 ```
 
@@ -86,23 +158,9 @@ The project uses a `.gitleaksrc.json` file for custom configurations. This file 
 {
   "customPatterns": [],
   "ignoredPatterns": [],
-  "ignorePaths": ["node_modules", ".git", "package.json", "package-lock.json"],
+  "ignorePaths": ["node_modules", ".git", "package.json", "package-lock.json"]
 }
 ```
-
-
-## Default Patterns
-
-The following patterns are included by default. You can disable specific patterns via the `ignoredPatterns` option.
-
-| Pattern Key          | Regex                                      | Description                  |
-|-----------------------|--------------------------------------------|------------------------------|
-| `awsAccessKey`        | `AKIA[0-9A-Z]{16}`                        | AWS Access Key               |
-| `githubToken`         | `ghp_[A-Za-z0-9]{36}`                     | GitHub Token                 |
-| `googleApiKey`        | `AIza[0-9A-Za-z-_]{33}`                   | Google API Key               |
-| `openAiSecretKey`     | `sk-[A-Za-z0-9]{48}`                      | OpenAI Secret Key            |
-| `genericApiKey`       | `\\b[A-Za-z0-9]{40}\\b`                   | Generic API Key              |
-
 
 ## Development
 

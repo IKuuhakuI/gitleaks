@@ -1,14 +1,24 @@
 const fs = require("node:fs");
+const path = require("node:path");
 const {getAllFiles} = require("../utils/fileUtils");
 
 /**
  * Scans the repository for sensitive data.
  * @param {string} repoPath - Path to the repository.
  * @param {object} config - Configuration object.
+ * @param {string[]} files - List of files to scan.
  * @returns {Promise<Array>} List of matches.
  */
-const scanRepository = async (repoPath, config) => {
-    const files = await getAllFiles(repoPath, config.ignorePaths || []);
+const scanRepository = async (repoPath, config, files = null) => {
+    const targetFiles = (
+        files || (await getAllFiles(repoPath, config.ignorePaths || []))
+    ).filter(
+        (file) =>
+            !config.ignorePaths.some((ignorePath) =>
+                file.startsWith(path.join(repoPath, ignorePath)),
+            ),
+    );
+
     const patterns = Object.values(config.defaultPatterns).concat(
         config.customPatterns || [],
     );
@@ -17,7 +27,7 @@ const scanRepository = async (repoPath, config) => {
 
     const matches = [];
 
-    for (const file of files) {
+    for (const file of targetFiles) {
         const content = fs.readFileSync(file, "utf-8");
         combinedRegex.lastIndex = 0;
 

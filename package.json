@@ -32,5 +32,9 @@
     "index.js",
     "README.md",
     "reporter.js"
-  ]
+  ],
+  "dependencies": {
+    "simple-git": "^3.27.0",
+    "yargs": "^17.7.2"
+  }
 }

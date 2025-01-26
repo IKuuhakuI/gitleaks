@@ -38,7 +38,7 @@ describe("Default Patterns", () => {
     });
 
     it("should match an OpenAI key", () => {
-        const openAiKey = "sk-1234567890abcdef1234567890abcdef12345678";
+        const openAiKey = "sk-1234567890abcdef1234567890abcdef12345678abcdefgh";
         const regex = new RegExp(defaultPatterns.openAiSecretKey);
 
         expect(openAiKey).to.match(regex);

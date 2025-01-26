@@ -120,8 +120,23 @@ describe("Scanner", () => {
 
         const expectedResult = {
             line: 1,
-            match: "sk-1234567890abcdef1234567890abcdef12345678",
+            match: "sk-1234567890abcdef1234567890abcdef12345678abcdefgh",
             file: path.resolve(MOCK_DIR, "defaultPatterns/openai-key.txt"),
+        };
+
+        expect(results).to.deep.include(expectedResult);
+    });
+
+    it("should detect a Gemini key in files", async () => {
+        const results = await scanRepository(MOCK_DIR, {
+            ignorePaths: [],
+            customPatterns: [],
+        });
+
+        const expectedResult = {
+            line: 1,
+            match: "gem-1234567890abcdef1234567890abcdef12345678",
+            file: path.resolve(MOCK_DIR, "defaultPatterns/gemini-key.txt"),
         };
 
         expect(results).to.deep.include(expectedResult);

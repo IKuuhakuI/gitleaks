@@ -27,19 +27,17 @@ const argv = yargs(hideBin(process.argv))
         const repoPath = process.cwd();
         let files = [];
 
-        if (!(argv.staged || argv.all)) {
-            console.error("[ERROR] Please specify either --staged or --all.");
-            process.exit(1);
-        }
+        const isStaged = argv.staged;
+        const isAll = argv.all || !argv.staged;
 
-        if (argv.staged) {
+        if (isStaged) {
             console.info("[INFO] Scanning staged files...");
             const gitRepo = git(repoPath);
             const status = await gitRepo.status();
             files = status.staged.map((file) => `${repoPath}/${file}`);
         }
 
-        if (argv.all) {
+        if (isAll) {
             console.info("[INFO] Scanning all files in the repository...");
             const {getAllFiles} = require("./utils/fileUtils");
             files = await getAllFiles(repoPath, config.ignorePaths || []);

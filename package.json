@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bin": {
     "gitleaks": "./index.js"
   },
@@ -26,10 +26,11 @@
     "sinon": "^19.0.2"
   },
   "files": [
-    "index.js",
     "core/",
     "utils/",
-    "reporter.js",
-    "README.md"
+    "LICENSE",
+    "index.js",
+    "README.md",
+    "reporter.js"
   ]
 }

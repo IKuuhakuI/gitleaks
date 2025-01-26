@@ -176,4 +176,33 @@ describe("Scanner", () => {
 
         expect(results).to.deep.include(expectedResult);
     });
+
+    it("should detect 2 or more sensitive data defaultPattern in same file", async () => {
+        const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
+            ignorePaths: [],
+            customPatterns: [],
+        });
+
+        const expectedResult1 = {
+            line: 1,
+            match: "AIzaSyEwcsswgzbu7NY221_KiERu0aRhI_lqIgd",
+            file: path.resolve(
+                MOCK_DIR,
+                "defaultPatterns/double-default-key.txt",
+            ),
+        };
+
+        const expectedResult2 = {
+            line: 2,
+            match: "AIzaSyEwcsswgzbu7NY221_KiERu0aRhI_lqIgd",
+            file: path.resolve(
+                MOCK_DIR,
+                "defaultPatterns/double-default-key.txt",
+            ),
+        };
+
+        expect(results).to.deep.include(expectedResult1);
+        expect(results).to.deep.include(expectedResult2);
+    });
 });

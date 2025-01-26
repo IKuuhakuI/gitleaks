@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
 const yargs = require("yargs");
-const git = require("simple-git");
 const {hideBin} = require("yargs/helpers");
-const {loadConfig} = require("./core/config");
-const {reportResults} = require("./reporter");
-const {scanRepository} = require("./core/scanner");
+const {version} = require("./package.json");
+const {runScan} = require("./core/index.js");
 
 const argv = yargs(hideBin(process.argv))
+    .usage("Usage: gitleaks [options]")
     .option("staged", {
         alias: "s",
         type: "boolean",
@@ -16,48 +15,17 @@ const argv = yargs(hideBin(process.argv))
     .option("all", {
         alias: "a",
         type: "boolean",
-        description: "Scan all files in the repository",
+        description: "Scan all files in the repository (default behavior)",
     })
-    .conflicts("staged", "all")
-    .help().argv;
+    .version(version)
+    .alias("version", "v")
+    .help("help")
+    .alias("help", "h")
+    .epilog("For more information, read the README.md").argv;
 
 (async () => {
     try {
-        const config = loadConfig();
-        const repoPath = process.cwd();
-        let files = [];
-
-        const isStaged = argv.staged;
-        const isAll = argv.all || !argv.staged;
-
-        if (isStaged) {
-            console.info("[INFO] Scanning staged files...");
-            const gitRepo = git(repoPath);
-            const status = await gitRepo.status();
-            files = status.staged.map((file) => `${repoPath}/${file}`);
-        }
-
-        if (isAll) {
-            console.info("[INFO] Scanning all files in the repository...");
-            const {getAllFiles} = require("./utils/fileUtils");
-            files = await getAllFiles(repoPath, config.ignorePaths || []);
-        }
-
-        if (files.length === 0) {
-            console.info("[INFO] No files to scan.");
-            process.exit(0);
-        }
-
-        const results = await scanRepository(repoPath, config, files);
-
-        if (results.length === 0) {
-            console.info("[INFO] No sensitive data found.");
-            process.exit(0);
-        }
-
-        reportResults(results, config);
-        console.error("[ERROR] Sensitive data detected!");
-        process.exit(1);
+        await runScan(argv);
     } catch (error) {
         console.error(`[ERROR] ${error.message}`);
         process.exit(1);

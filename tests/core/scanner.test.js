@@ -1,12 +1,15 @@
 const path = require("node:path");
 const {expect} = require("chai");
 const {scanRepository} = require("../../core/scanner");
+const {defaultPatterns} = require("../../core/patterns");
 
 const MOCK_DIR = path.join(__dirname, "../utils/mockRepo");
 
 describe("Scanner", () => {
     it("should detect sensitive data patterns in real files", async () => {
         const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
+            ignoredPatterns: [],
             ignorePaths: ["defaultPatterns"],
             customPatterns: ["test-pattern"],
         });
@@ -28,6 +31,7 @@ describe("Scanner", () => {
 
     it("should ignore files in the specified ignorePaths", async () => {
         const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
             customPatterns: ["test-pattern"],
             ignorePaths: ["subdir", "defaultPatterns"],
         });
@@ -42,6 +46,7 @@ describe("Scanner", () => {
 
     it("should return an empty array if no matches are found", async () => {
         const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
             ignorePaths: ["defaultPatterns"],
             customPatterns: ["no-match-pattern"],
         });
@@ -51,6 +56,7 @@ describe("Scanner", () => {
 
     it("should handle files with no content gracefully", async () => {
         const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
             ignorePaths: ["defaultPatterns"],
             customPatterns: ["empty-file-pattern"],
         });
@@ -61,6 +67,7 @@ describe("Scanner", () => {
     it("should handle invalid patterns gracefully", async () => {
         await expect(
             scanRepository(MOCK_DIR, {
+                defaultPatterns,
                 ignorePaths: [],
                 customPatterns: ["[invalid-regex"],
             }),
@@ -69,6 +76,7 @@ describe("Scanner", () => {
 
     it("should detect an AWS access key in files", async () => {
         const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
             ignorePaths: [],
             customPatterns: [],
         });
@@ -84,6 +92,7 @@ describe("Scanner", () => {
 
     it("should detect a GitHub token in files", async () => {
         const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
             ignorePaths: [],
             customPatterns: [],
         });
@@ -99,6 +108,7 @@ describe("Scanner", () => {
 
     it("should detect a Google API key in files", async () => {
         const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
             ignorePaths: [],
             customPatterns: [],
         });
@@ -114,6 +124,7 @@ describe("Scanner", () => {
 
     it("should detect an OpenAI key in files", async () => {
         const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
             ignorePaths: [],
             customPatterns: [],
         });
@@ -129,6 +140,7 @@ describe("Scanner", () => {
 
     it("should detect a Gemini custom key in files", async () => {
         const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
             ignorePaths: [],
             customPatterns: [],
         });

@@ -1,5 +1,4 @@
 const fs = require("node:fs");
-const {defaultPatterns} = require("./patterns");
 const {getAllFiles} = require("../utils/fileUtils");
 
 /**
@@ -10,7 +9,7 @@ const {getAllFiles} = require("../utils/fileUtils");
  */
 const scanRepository = async (repoPath, config) => {
     const files = await getAllFiles(repoPath, config.ignorePaths || []);
-    const patterns = Object.values(defaultPatterns).concat(
+    const patterns = Object.values(config.defaultPatterns).concat(
         config.customPatterns || [],
     );
 

@@ -3,7 +3,7 @@
  * @param {Array} matches - List of matches from the scan.
  * @param {Object} config - Configuration object.
  */
-function reportResults(matches) {
+const reportResults = (matches) => {
     if (matches.length === 0) {
         console.info("[INFO] No sensitive data found!");
         return;
@@ -15,6 +15,6 @@ function reportResults(matches) {
         console.info(`[INFO]    Match: ${match.match}`);
         console.info(`[INFO]    Line: ${match.line}\n`);
     });
-}
+};
 
 module.exports = {reportResults};

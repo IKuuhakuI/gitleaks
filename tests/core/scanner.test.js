@@ -225,4 +225,127 @@ describe("Scanner", () => {
 
         expect(results).to.have.lengthOf(2);
     });
+
+    it("should scan a specific list of files and find sensitive data", async () => {
+        createMockFile("file1.txt", "AKIAIOSFODNN7EXAMPLE");
+        createMockFile("file2.txt", "ghp_1234567890abcdef1234567890abcdef1234");
+
+        const filesToScan = [path.join(MOCK_DIR, "file1.txt")];
+        const results = await scanRepository(
+            MOCK_DIR,
+            {
+                defaultPatterns,
+                ignorePaths: [],
+                customPatterns: [],
+            },
+            filesToScan,
+        );
+
+        expect(results).to.have.lengthOf(1);
+        expect(results[0]).to.deep.include({
+            line: 1,
+            match: "AKIAIOSFODNN7EXAMPLE",
+            file: path.join(MOCK_DIR, "file1.txt"),
+        });
+    });
+
+    it("should return an empty array if an empty files array is provided", async () => {
+        createMockFile("file1.txt", "AKIAIOSFODNN7EXAMPLE");
+
+        const results = await scanRepository(
+            MOCK_DIR,
+            {
+                defaultPatterns,
+                ignorePaths: [],
+                customPatterns: [],
+            },
+            [],
+        );
+
+        expect(results).to.be.an("array").that.is.empty;
+    });
+
+    it("should handle non-existent files gracefully", async () => {
+        createMockFile("file1.txt", "AKIAIOSFODNN7EXAMPLE");
+
+        const filesToScan = [path.join(MOCK_DIR, "nonexistent-file.txt")];
+        try {
+            await scanRepository(
+                MOCK_DIR,
+                {
+                    defaultPatterns,
+                    ignorePaths: [],
+                    customPatterns: [],
+                },
+                filesToScan,
+            );
+            throw new Error("Expected an error for non-existent file.");
+        } catch (error) {
+            expect(error.message).to.include("ENOENT");
+        }
+    });
+
+    it("should respect ignorePaths even with specific files provided", async () => {
+        createMockFile(
+            "ignored-file.txt",
+            "ghp_1234567890abcdef1234567890abcdef1234",
+        );
+        createMockFile("file1.txt", "AKIAIOSFODNN7EXAMPLE");
+
+        const filesToScan = [
+            path.join(MOCK_DIR, "file1.txt"),
+            path.join(MOCK_DIR, "ignored-file.txt"),
+        ];
+
+        const results = await scanRepository(
+            MOCK_DIR,
+            {
+                defaultPatterns,
+                customPatterns: [],
+                ignorePaths: ["ignored-file.txt"],
+            },
+            filesToScan,
+        );
+
+        expect(results).to.have.lengthOf(1);
+        expect(results[0]).to.deep.include({
+            line: 1,
+            match: "AKIAIOSFODNN7EXAMPLE",
+            file: path.join(MOCK_DIR, "file1.txt"),
+        });
+    });
+
+    it("should detect sensitive data from multiple specific files", async () => {
+        createMockFile("file1.txt", "AKIAIOSFODNN7EXAMPLE");
+        createMockFile("file2.txt", "ghp_1234567890abcdef1234567890abcdef1234");
+
+        const filesToScan = [
+            path.join(MOCK_DIR, "file1.txt"),
+            path.join(MOCK_DIR, "file2.txt"),
+        ];
+
+        const results = await scanRepository(
+            MOCK_DIR,
+            {
+                defaultPatterns,
+                ignorePaths: [],
+                customPatterns: [],
+            },
+            filesToScan,
+        );
+
+        expect(results).to.have.lengthOf(2);
+        expect(results).to.deep.include.members([
+            {
+                line: 1,
+                match: "AKIAIOSFODNN7EXAMPLE",
+                file: path.join(MOCK_DIR, "file1.txt"),
+            },
+            {
+                line: 1,
+                file: path.join(MOCK_DIR, "file2.txt"),
+                match: "ghp_1234567890abcdef1234567890abcdef1234",
+            },
+        ]);
+    });
 });

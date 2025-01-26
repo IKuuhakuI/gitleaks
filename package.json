@@ -11,6 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bin": {
+    "gitleaks": "./index.js"
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "chai": "4.3.7",

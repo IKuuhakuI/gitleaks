@@ -1,6 +1,6 @@
 {
   "name": "@ziul285/gitleaks",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A custom Gitleaks-like scanner for detecting sensitive data.",
   "main": "index.js",
   "scripts": {
@@ -24,5 +24,12 @@
     "lint-staged": "^15.4.2",
     "mocha": "^11.1.0",
     "sinon": "^19.0.2"
-  }
+  },
+  "files": [
+    "index.js",
+    "core/",
+    "utils/",
+    "reporter.js",
+    "README.md"
+  ]
 }

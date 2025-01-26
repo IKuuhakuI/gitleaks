@@ -1,13 +1,13 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const {defaultPatterns} = require("./patterns");
-const {validateField, isArray, isObject} = require("./utils/validationUtils");
+const {validateField, isArray, isObject} = require("../utils/validator");
 
 /**
  * Loads the configuration for gitleaks with enhanced error handling and warnings for invalid keys.
  * @returns {Object} The validated configuration object.
  */
-function loadConfig() {
+const loadConfig = () => {
     const configPath = path.join(process.cwd(), ".gitleaksrc.json");
 
     let config = {
@@ -86,6 +86,6 @@ function loadConfig() {
     } catch (error) {
         throw new Error(`Failed to load configuration: ${error.message}`);
     }
-}
+};
 
 module.exports = {loadConfig};

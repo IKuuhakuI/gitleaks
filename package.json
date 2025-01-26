@@ -1,11 +1,12 @@
 {
   "name": "gitleaks",
   "version": "0.0.1",
-  "description": "",
+  "description": "A custom Gitleaks-like scanner for detecting sensitive data.",
   "main": "index.js",
   "scripts": {
     "lint": "biome check .",
     "format": "biome format .",
+    "start": "node index.js",
     "test": "mocha tests/**/*.test.js --recursive --require tests/index.js"
   },
   "keywords": [],

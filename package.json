@@ -52,6 +52,7 @@
     "reporter.js"
   ],
   "dependencies": {
+    "minimatch": "^9.0.5",
     "simple-git": "^3.27.0",
     "yargs": "^17.7.2"
   }

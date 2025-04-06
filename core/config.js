@@ -21,7 +21,14 @@ const loadConfig = () => {
         ],
     };
 
-    const validKeys = ["customPatterns", "ignoredPatterns", "ignorePaths"];
+    const validKeys = [
+        "customPatterns",
+        "ignoredPatterns",
+        "ignorePaths",
+        "ignoreExtensions",
+        "maxFileSizeKb",
+        "includePatterns",
+    ];
 
     if (!fs.existsSync(configPath)) {
         return {...config, defaultPatterns};
@@ -56,6 +63,29 @@ const loadConfig = () => {
 
         if (userConfig.ignorePaths) {
             validateField(userConfig.ignorePaths, "ignorePaths", isArray);
+        }
+
+        if (userConfig.ignoreExtensions) {
+            validateField(
+                userConfig.ignoreExtensions,
+                "ignoreExtensions",
+                isArray,
+            );
+        }
+
+        if (
+            userConfig.maxFileSizeKb !== undefined &&
+            typeof userConfig.maxFileSizeKb !== "number"
+        ) {
+            throw new Error("'maxFileSizeKb' must be a number.");
+        }
+
+        if (userConfig.includePatterns) {
+            validateField(
+                userConfig.includePatterns,
+                "includePatterns",
+                isArray,
+            );
         }
 
         config = {...config, ...userConfig};

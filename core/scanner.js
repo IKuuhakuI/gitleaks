@@ -1,5 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
+const {minimatch} = require("minimatch");
 const {getAllFiles} = require("../utils/fileUtils");
 
 /**
@@ -10,14 +11,43 @@ const {getAllFiles} = require("../utils/fileUtils");
  * @returns {Promise<Array>} List of matches.
  */
 const scanRepository = async (repoPath, config, files = null) => {
-    const targetFiles = (
-        files || (await getAllFiles(repoPath, config.ignorePaths || []))
-    ).filter(
-        (file) =>
-            !config.ignorePaths.some((ignorePath) =>
-                file.startsWith(path.join(repoPath, ignorePath)),
-            ),
-    );
+    const allFiles =
+        files || (await getAllFiles(repoPath, config.ignorePaths || []));
+
+    const targetFiles = allFiles.filter((file) => {
+        const relativePath = path.relative(repoPath, file);
+
+        if (
+            config.ignorePaths?.some((ignorePath) =>
+                relativePath.startsWith(ignorePath),
+            )
+        )
+            return false;
+
+        if (
+            config.ignoreExtensions?.some((ext) =>
+                file.toLowerCase().endsWith(ext.toLowerCase()),
+            )
+        )
+            return false;
+
+        if (
+            config.includePatterns?.length &&
+            !config.includePatterns.some((pattern) =>
+                minimatch(relativePath, pattern),
+            )
+        )
+            return false;
+
+        if (config.maxFileSizeKb) {
+            const stats = fs.statSync(file);
+            const sizeKb = stats.size / 1024;
+
+            if (sizeKb > config.maxFileSizeKb) return false;
+        }
+
+        return true;
+    });
 
     const patterns = Object.values(config.defaultPatterns).concat(
         config.customPatterns || [],

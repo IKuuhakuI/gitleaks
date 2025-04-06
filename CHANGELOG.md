@@ -12,33 +12,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 Added
 
 - **Inline Ignore Support:** Use `@gitleaks ignore` to skip secret detection on specific lines.
-- New test cases for inline ignore handling (single/multiple lines, mixed matches).
-- `@gitleaks ignore` works with default and custom patterns.
+- **New Config Options**:
+  - `ignoreExtensions`: skip files by file extension (e.g. `.zip`, `.log`)
+  - `maxFileSizeKb`: skip files larger than the given size
+  - `includePatterns`: glob-based file filters (e.g. `**/*.js`, `src/**/*.ts`)
+- **Glob pattern matching** using `minimatch` for flexible include filters.
+- Added test cases for all new config options.
 
 ### 🧪 Improved
 
-- Refactored line-by-line scanning to support Biome linting (`noAssignInExpressions`).
-- Stronger test coverage with 100% match accuracy across patterns.
-- Improved configuration structure via `.gitleaksrc.json`.
+- Refactored scanning logic to support:
+  - Dynamic file filtering with multiple conditions
+- Centralized file filtering logic for reusability and testability.
+- 100% test coverage for all config combinations.
 
 ### 📘 Docs
 
-- Updated README with new description and inline ignore usage.
-- Added project badges (npm version, license, test status, coverage, Node version).
-- Added this `CHANGELOG.md` file.
-
----
-
-## [0.0.7] - 2025-01-26
-
-### ✅ Added
-
-- Initial CLI interface (`--all`, `--staged`, `--patterns`, `--exclude`, etc.).
-- Built-in patterns for:
-  - AWS Access Key
-  - GitHub Token
-  - Google API Key
-  - OpenAI Key
-- Custom pattern support via CLI or config file.
-- Path ignore logic via `ignorePaths` config.
-- Husky integration instructions.
+- Updated README with:
+  - Full config reference
+  - Husky integration
+  - CLI flag examples
+  - New badge section
+- Added `.gitleaksrc.json` config examples with glob patterns and size limits.
+- Added this `CHANGELOG.md` following Keep a Changelog standard.

@@ -27,6 +27,23 @@ describe("Scanner", () => {
         fs.writeFileSync(fullPath, content);
     };
 
+    const createMockFileWithSize = (filePath, content, sizePaddingKb = 0) => {
+        const fullPath = path.join(MOCK_DIR, filePath);
+        const dirPath = path.dirname(fullPath);
+
+        if (!fs.existsSync(dirPath)) {
+            fs.mkdirSync(dirPath, {recursive: true});
+        }
+
+        let contentToWrite = content;
+        if (sizePaddingKb > 0) {
+            const extra = "x".repeat(sizePaddingKb * 1024);
+            contentToWrite += extra;
+        }
+
+        fs.writeFileSync(fullPath, contentToWrite);
+    };
+
     it("should detect sensitive data patterns in real files", async () => {
         createMockFile("file1.txt", "test-pattern");
         createMockFile("subdir/nested.txt", "test-pattern");
@@ -416,5 +433,68 @@ describe("Scanner", () => {
                 file: path.join(MOCK_DIR, "mixed-matches.txt"),
             },
         ]);
+    });
+
+    it("should ignore files with extensions in ignoreExtensions", async () => {
+        createMockFile("secret.log", "AKIAIOSFODNN7EXAMPLE");
+        createMockFile("visible.txt", "AKIAIOSFODNN7EXAMPLE");
+
+        const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
+            ignorePaths: [],
+            customPatterns: [],
+            ignoreExtensions: [".log"],
+        });
+
+        expect(results).to.have.lengthOf(1);
+        expect(results[0].file).to.include("visible.txt");
+    });
+
+    it("should only scan files matching includePatterns", async () => {
+        createMockFile("keep.js", "AKIAIOSFODNN7EXAMPLE");
+        createMockFile("drop.txt", "AKIAIOSFODNN7EXAMPLE");
+
+        const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
+            ignorePaths: [],
+            customPatterns: [],
+            includePatterns: ["**/*.js"],
+        });
+
+        expect(results).to.have.lengthOf(1);
+        expect(results[0].file).to.include("keep.js");
+    });
+
+    it("should skip files larger than maxFileSizeKb", async () => {
+        createMockFileWithSize("small.txt", "AKIAIOSFODNN7EXAMPLE", 1);
+        createMockFileWithSize("large.txt", "AKIAIOSFODNN7EXAMPLE", 600);
+
+        const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
+            ignorePaths: [],
+            maxFileSizeKb: 500,
+            customPatterns: [],
+        });
+
+        expect(results).to.have.lengthOf(1);
+        expect(results[0].file).to.include("small.txt");
+    });
+
+    it("should respect all filters together", async () => {
+        createMockFile("match.js", "AKIAIOSFODNN7EXAMPLE");
+        createMockFile("ignore.log.js", "AKIAIOSFODNN7EXAMPLE");
+        createMockFileWithSize("skip.txt", "AKIAIOSFODNN7EXAMPLE", 600);
+
+        const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
+            ignorePaths: [],
+            maxFileSizeKb: 500,
+            customPatterns: [],
+            includePatterns: ["**/*.js"],
+            ignoreExtensions: [".log.js"],
+        });
+
+        expect(results).to.have.lengthOf(1);
+        expect(results[0].file).to.include("match.js");
     });
 });

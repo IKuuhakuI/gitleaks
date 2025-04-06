@@ -183,11 +183,25 @@ The project uses a `.gitleaksrc.json` file for custom configurations. This file 
 
 ```json
 {
-  "ignoredPatterns": ["awsAccessKey"],
-  "ignorePaths": ["node_modules", ".git"],
-  "customPatterns": ["TEST_KEY_[A-Za-z0-9]{10}"]
+  "maxFileSizeKb": 500,
+  "ignoreExtensions": [".jpg", ".zip", ".log"],
+  "includePatterns": ["**/*.js", "src/**/*.ts"],
+  "customPatterns": ["TEST_KEY_[A-Za-z0-9]{10}"],
+  "ignorePaths": ["node_modules", ".git", "dist"],
+  "ignoredPatterns": ["awsAccessKey", "openAiSecretKey"]
 }
 ```
+
+### 📘 Available Configuration Fields
+
+| Field              | Type       | Description                                             |
+| ------------------ | ---------- | ------------------------------------------------------- |
+| `ignorePaths`      | `string[]` | Folders or files to skip entirely.                      |
+| `ignoreExtensions` | `string[]` | File extensions to skip (e.g., `[".zip", ".log"]`).     |
+| `maxFileSizeKb`    | `number`   | Skip files larger than this (in kilobytes).             |
+| `includePatterns`  | `string[]` | Glob patterns for files to include (e.g., `"**/*.js"`). |
+| `ignoredPatterns`  | `string[]` | Keys of default patterns to disable.                    |
+| `customPatterns`   | `string[]` | User-defined regex patterns to scan for.                |
 
 #### Default Config (if `.gitleaksrc.json` is not present):
 

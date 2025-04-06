@@ -363,4 +363,27 @@ describe("Scanner", () => {
 
         expect(results).to.be.an("array").that.is.empty;
     });
+
+    it("should detect a pattern on a line without @gitleaks ignore and ignore the one with it", async () => {
+        createMockFile(
+            "partial-inline-ignore.txt",
+            [
+                "AKIAIOSFODNN7EXAMPLE",
+                "ghp_1234567890abcdef1234567890abcdef1234 // @gitleaks ignore",
+            ].join("\n"),
+        );
+
+        const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
+            ignorePaths: [],
+            customPatterns: [],
+        });
+
+        expect(results).to.have.lengthOf(1);
+        expect(results[0]).to.deep.include({
+            line: 1,
+            match: "AKIAIOSFODNN7EXAMPLE",
+            file: path.join(MOCK_DIR, "partial-inline-ignore.txt"),
+        });
+    });
 });

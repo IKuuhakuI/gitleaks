@@ -348,4 +348,19 @@ describe("Scanner", () => {
             },
         ]);
     });
+
+    it("should ignore a single pattern on a line with @gitleaks ignore", async () => {
+        createMockFile(
+            "ignored-inline.txt",
+            "AKIAIOSFODNN7EXAMPLE // @gitleaks ignore",
+        );
+
+        const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
+            ignorePaths: [],
+            customPatterns: [],
+        });
+
+        expect(results).to.be.an("array").that.is.empty;
+    });
 });

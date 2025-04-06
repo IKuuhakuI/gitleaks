@@ -1,6 +1,6 @@
 {
   "name": "@ziul285/gitleaks",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "description": "A custom Gitleaks-like scanner for detecting sensitive data.",
   "main": "index.js",
   "scripts": {

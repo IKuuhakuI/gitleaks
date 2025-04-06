@@ -386,4 +386,35 @@ describe("Scanner", () => {
             file: path.join(MOCK_DIR, "partial-inline-ignore.txt"),
         });
     });
+
+    it("should detect multiple patterns in different lines, skipping ignored ones", async () => {
+        createMockFile(
+            "mixed-matches.txt",
+            [
+                "ghp_1234567890abcdef1234567890abcdef1234",
+                "AKIAIOSFODNN7EXAMPLE // @gitleaks ignore",
+                "sk-1234567890abcdef1234567890abcdef12345678abcdefgh",
+            ].join("\n"),
+        );
+
+        const results = await scanRepository(MOCK_DIR, {
+            defaultPatterns,
+            ignorePaths: [],
+            customPatterns: [],
+        });
+
+        expect(results).to.have.lengthOf(2);
+        expect(results).to.deep.include.members([
+            {
+                line: 1,
+                match: "ghp_1234567890abcdef1234567890abcdef1234",
+                file: path.join(MOCK_DIR, "mixed-matches.txt"),
+            },
+            {
+                line: 3,
+                match: "sk-1234567890abcdef1234567890abcdef12345678abcdefgh",
+                file: path.join(MOCK_DIR, "mixed-matches.txt"),
+            },
+        ]);
+    });
 });

@@ -29,21 +29,26 @@ const scanRepository = async (repoPath, config, files = null) => {
 
     for (const file of targetFiles) {
         const content = fs.readFileSync(file, "utf-8");
-        combinedRegex.lastIndex = 0;
+        const lines = content.split("\n");
 
-        let match;
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
 
-        do {
-            match = combinedRegex.exec(content);
+            if (line.includes("@gitleaks ignore")) continue;
 
-            if (!match) continue;
+            combinedRegex.lastIndex = 0;
+            let match = combinedRegex.exec(line);
 
-            matches.push({
-                file,
-                match: match[0],
-                line: getLine(content, match.index),
-            });
-        } while (match);
+            while (match !== null) {
+                matches.push({
+                    file,
+                    match: match[0],
+                    line: i + 1,
+                });
+
+                match = combinedRegex.exec(line);
+            }
+        }
     }
 
     return matches;
@@ -57,16 +62,6 @@ const scanRepository = async (repoPath, config, files = null) => {
 const createCombinedRegex = (patterns) => {
     const combined = patterns.map((pattern) => `(${pattern})`).join("|");
     return new RegExp(combined, "g");
-};
-
-/**
- * Calculates the line number of a match in a file's content.
- * @param {string} content - The file content as a string.
- * @param {number} index - The character index of the match.
- * @returns {number} The line number (1-based).
- */
-const getLine = (content, index) => {
-    return content.slice(0, index).split("\n").length;
 };
 
 module.exports = {scanRepository};
